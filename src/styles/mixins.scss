@@ -1,0 +1,233 @@
+// Mixins para efectos glassmorphism
+@mixin glass-effect($opacity: 0.1, $blur: 20px) {
+  background: rgba(255, 255, 255, $opacity);
+  backdrop-filter: blur($blur);
+  -webkit-backdrop-filter: blur($blur);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+@mixin glass-card($opacity: 0.1) {
+  @include glass-effect($opacity);
+  box-shadow: $shadow-glass;
+  border-radius: $radius-xl;
+}
+
+// Mixins para gradientes
+@mixin gradient-text($gradient) {
+  background: $gradient;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+@mixin gradient-border($gradient, $width: 2px, $radius: $radius-lg) {
+  position: relative;
+  border-radius: $radius;
+  
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: $width;
+    background: $gradient;
+    border-radius: inherit;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: xor;
+    -webkit-mask-composite: xor;
+  }
+}
+
+// Mixins para transiciones avanzadas
+@mixin smooth-hover($transform: translateY(-2px), $shadow: $shadow-xl) {
+  transition: all $transition-normal $ease-out-quart;
+  
+  &:hover {
+    transform: $transform;
+    box-shadow: $shadow;
+  }
+}
+
+@mixin scale-hover($scale: 1.05) {
+  transition: transform $transition-normal $ease-out-quart;
+  
+  &:hover {
+    transform: scale($scale);
+  }
+}
+
+// Mixins para animaciones de entrada
+@mixin fade-in-up($delay: 0s) {
+  opacity: 0;
+  transform: translateY(30px);
+  animation: fadeInUp 0.6s $ease-out-quart forwards;
+  animation-delay: $delay;
+}
+
+@mixin slide-in-right($delay: 0s) {
+  opacity: 0;
+  transform: translateX(50px);
+  animation: slideInRight 0.5s $ease-out-quart forwards;
+  animation-delay: $delay;
+}
+
+@mixin bounce-in($delay: 0s) {
+  opacity: 0;
+  transform: scale(0.3);
+  animation: bounceIn 0.8s $ease-bounce forwards;
+  animation-delay: $delay;
+}
+
+// Mixin para loading spinner
+@mixin spinner($size: 40px, $color: $accent-500, $thickness: 4px) {
+  width: $size;
+  height: $size;
+  border: $thickness solid rgba($color, 0.3);
+  border-top: $thickness solid $color;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+// Mixin para truncar texto
+@mixin text-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@mixin text-clamp($lines: 2) {
+  display: -webkit-box;
+  -webkit-line-clamp: $lines;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+// Mixin para centrar absolutamente
+@mixin absolute-center {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+// Mixin para flex center
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+// Mixin para grid auto-fit
+@mixin grid-auto-fit($min-width: 300px, $gap: $spacing-lg) {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax($min-width, 1fr));
+  gap: $gap;
+}
+
+// Mixin para responsive breakpoints
+@mixin responsive($breakpoint) {
+  @if $breakpoint == sm {
+    @media (min-width: $breakpoint-sm) { @content; }
+  }
+  @if $breakpoint == md {
+    @media (min-width: $breakpoint-md) { @content; }
+  }
+  @if $breakpoint == lg {
+    @media (min-width: $breakpoint-lg) { @content; }
+  }
+  @if $breakpoint == xl {
+    @media (min-width: $breakpoint-xl) { @content; }
+  }
+  @if $breakpoint == 2xl {
+    @media (min-width: $breakpoint-2xl) { @content; }
+  }
+}
+
+// Mixin para scroll personalizado
+@mixin custom-scrollbar($width: 8px, $track-color: transparent, $thumb-color: rgba(255, 255, 255, 0.3)) {
+  &::-webkit-scrollbar {
+    width: $width;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: $track-color;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: $thumb-color;
+    border-radius: $radius-full;
+    
+    &:hover {
+      background: rgba(255, 255, 255, 0.5);
+    }
+  }
+}
+
+// Mixin para estado de loading
+@mixin loading-shimmer {
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+// Keyframes para animaciones
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInRight {
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
